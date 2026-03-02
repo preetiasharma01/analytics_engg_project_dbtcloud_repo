@@ -1,14 +1,14 @@
 WITH hourly_raw AS (
         SELECT
-                airport_code,
-                station_id,
+                airport_faa,
+                station,
                 JSON_ARRAY_ELEMENTS(extracted_data -> 'data') AS json_data
         FROM {{source('weather_data', 'weather_hourly_raw')}}
     ),
     hourly_data AS (
         SELECT  
-                airport_code
-                ,station_id
+                airport_faa
+                ,station
                 ,(json_data->>'time')::TIMESTAMP AS timestamp	
                 ,(json_data->>'temp')::NUMERIC AS temp_c
                 ,(json_data->>'dwpt')::NUMERIC AS dewpoint_c
